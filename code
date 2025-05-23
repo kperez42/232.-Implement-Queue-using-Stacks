@@ -1,0 +1,53 @@
+/*
+    Name: Kevin Daniel Perez Ramirez
+    Date: May 23, 2025
+    LeetCode Problem 232 - Implement Queue using Stacks
+    Description:
+        This class implements a queue (FIFO) using two stacks (LIFO).
+        It supports push, pop, peek, and empty operations, while maintaining
+        average O(1) time per operation (amortized complexity).
+*/
+
+#include <stack>   // For using std::stack
+using namespace std;
+
+class MyQueue {
+private:
+    stack<int> input;   // Used for enqueue (push) operations
+    stack<int> output;  // Used for dequeue (pop/peek) operations
+
+public:
+    // Constructor: Initializes the queue
+    MyQueue() {}
+
+    // Pushes element x to the back of the queue
+    void push(int x) {
+        input.push(x);  // Simply push onto the input stack
+    }
+
+    // Removes the element from the front of the queue and returns it
+    int pop() {
+        peek();                 // Ensure output stack has the correct order
+        int val = output.top(); // Get the front element
+        output.pop();           // Remove it from output
+        return val;             // Return the dequeued value
+    }
+
+    // Returns the element at the front of the queue without removing it
+    int peek() {
+        // If output stack is empty, move all elements from input to output
+        if (output.empty()) {
+            while (!input.empty()) {
+                output.push(input.top());  // Reverse order from input to output
+                input.pop();
+            }
+        }
+        return output.top();  // Front of the queue is now on top of output
+    }
+
+    // Returns true if the queue is empty
+    bool empty() {
+        // Queue is empty only when both stacks are empty
+        return input.empty() && output.empty();
+    }
+};
